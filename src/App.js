@@ -41,37 +41,38 @@ export default function App() {
     if (!requestFromUser) {
       setStatus("edle");
       Notiflix.Notify.info("Please, enter a new request.");
-    } else {
-      fetchImages(requestFromUser, page)
-        .then((response) => {
-          const imagesArr = response.data.hits;
-
-          if (!imagesArr.length) {
-            Notiflix.Notify.failure(
-              "Sorry, there are no images matching your search query. Please try again."
-            );
-            setStatus("rejected");
-            setImages([]);
-            return;
-          }
-          console.log("response.data.hits", imagesArr);
-          // this.setState({
-          //   images: [...this.state.images, ...imagesArr],
-          //   status: "resolved",
-          // });
-          //imagesArr ?
-          //   setImages((imagesArr) => [ ...imagesArr])
-          // :
-          // setImages((imagesArr) => [...imagesArr]);
-          //setImages([...imagesArr]);
-          setImages(images.concat(imagesArr));
-          setStatus("resolved");
-        })
-        .catch((error) => {
-          setStatus("rejected");
-          setError(error);
-        });
+      return;
     }
+
+    fetchImages(requestFromUser, page)
+      .then((response) => {
+        const imagesArr = response.data.hits;
+
+        if (!imagesArr.length) {
+          Notiflix.Notify.failure(
+            "Sorry, there are no images matching your search query. Please try again."
+          );
+          setStatus("rejected");
+          setImages([]);
+          return;
+        }
+        console.log("response.data.hits", imagesArr);
+        // this.setState({
+        //   images: [...this.state.images, ...imagesArr],
+        //   status: "resolved",
+        // });
+        //imagesArr ?
+        //   setImages((imagesArr) => [ ...imagesArr])
+        // :
+        // setImages((imagesArr) => [...imagesArr]);
+        //setImages([...imagesArr]);
+        setImages(images.concat(imagesArr));
+        setStatus("resolved");
+      })
+      .catch((error) => {
+        setStatus("rejected");
+        setError(error);
+      });
   }, [requestFromUser, page]);
 
   return (
