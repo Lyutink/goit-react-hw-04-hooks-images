@@ -1,51 +1,46 @@
-import { Component } from "react";
+import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import PropTypes from "prop-types";
 import { ModalBackdrop, ModalContent } from "./Modal.styled";
 
 const modalRoot = document.querySelector("#modal-root");
 
-export default class Modal extends Component {
-  static propTypes = { children: PropTypes.node.isRequired };
+export default function Modal({ children }) {
+  const [showModal, setShowModal] = useState(true);
 
-  state = {
-    showModal: true,
-  };
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
-  componentDidMount() {
-    window.addEventListener("keydown", this.handleKeyDown);
-  }
+  // const toggleModal = () => {
+  //   setShowModal((prevState) => ( !prevState.showModal ));
+  // };
 
-  componentWillUnmount() {
-    window.removeEventListener("keydown", this.handleKeyDown);
-  }
-
-  toggleModal = () => {
-    this.setState((prevState) => ({ showModal: !prevState.showModal }));
-  };
-
-  handleKeyDown = (event) => {
+  const handleKeyDown = (event) => {
     if (event.code === "Escape") {
-      this.setState({ show: false });
+      setShowModal(false);
     }
   };
 
-  handleBackdropClick = (event) => {
+  const handleBackdropClick = (event) => {
     if (event.target === event.currentTarget) {
-      this.setState({ showModal: false });
+      setShowModal(false);
     }
   };
 
-  render() {
-    if (this.state.showModal === true) {
-      return createPortal(
-        <ModalBackdrop onClick={this.handleBackdropClick}>
-          <ModalContent>{this.props.children}</ModalContent>
-        </ModalBackdrop>,
-        modalRoot
-      );
-    } else {
-      return <></>;
-    }
+  if (showModal === true) {
+    return createPortal(
+      <ModalBackdrop onClick={handleBackdropClick}>
+        <ModalContent>{children}</ModalContent>
+      </ModalBackdrop>,
+      modalRoot
+    );
+  } else {
+    return <></>;
   }
 }
+
+Modal.propTypes = {
+  children: PropTypes.node.isRequired,
+};
