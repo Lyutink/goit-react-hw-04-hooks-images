@@ -4,7 +4,7 @@ import { ButtonLoade, ButtonLoadeMore } from "./Button.styled";
 export default function Button({ onClick }) {
   return (
     <ButtonLoade>
-      <ButtonLoadeMore onClick={onClick}>Load more</ButtonLoadeMore>;
+      <ButtonLoadeMore onClick={onClick}>Load more</ButtonLoadeMore>
     </ButtonLoade>
   );
 }
